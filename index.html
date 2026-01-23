@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Космический Шутер</title>
-    <link rel="icon" type="image/x-icon" href="icon.ico">
     <style>
         * {
             margin: 0;
@@ -647,14 +646,8 @@
             
             if (gamePaused) {
                 document.getElementById('pauseMenu').style.display = 'block';
-                if (musicEnabled) {
-                    sounds.music.pause();
-                }
             } else {
                 document.getElementById('pauseMenu').style.display = 'none';
-                if (musicEnabled) {
-                    sounds.music.play().catch(e => {});
-                }
             }
         }
 
@@ -662,9 +655,6 @@
             playSound('click');
             gamePaused = false;
             document.getElementById('pauseMenu').style.display = 'none';
-            if (musicEnabled) {
-                sounds.music.play().catch(e => {});
-            }
         }
 
         function exitToMenu() {
@@ -677,5 +667,4 @@
         gameLoop();
     </script>
 </body>
-
 </html>
