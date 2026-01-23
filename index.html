@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Космический Шутер</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(to bottom, #0a0e27 0%, #1a1a2e 50%, #16213e 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+        }
+        #gameContainer {
+            position: relative;
+            background: #000;
+            border: 3px solid #4a9eff;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(74, 158, 255, 0.5);
+            width: 100vw;
+            max-width: 100vw;
+            height: 100vh;
+        }
+        canvas {
+            display: block;
+            background: radial-gradient(ellipse at center, #1a1a2e 0%, #000000 100%);
+            width: 100%;
+            height: 100%;
+        }
+        #ui {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #fff;
+            font-size: 20px;
+            text-shadow: 0 0 10px #4a9eff;
+            z-index: 10;
+        }
+        .menu {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            padding: 50px 60px;
+            border-radius: 20px;
+            text-align: center;
+            color: #fff;
+            border: 3px solid #4a9eff;
+            box-shadow: 0 0 50px rgba(74, 158, 255, 0.8);
+            z-index: 100;
+        }
+        #mainMenu h1 {
+            font-size: 56px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: none;
+            animation: glow 2s ease-in-out infinite;
+        }
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 10px #667eea); }
+            50% { filter: drop-shadow(0 0 25px #764ba2); }
+        }
+        #mainMenu p {
+            font-size: 18px;
+            color: #aaa;
+            margin-bottom: 40px;
+        }
+        #difficultyMenu h2 {
+            font-size: 42px;
+            margin-bottom: 30px;
+            color: #4a9eff;
+            text-shadow: 0 0 20px #4a9eff;
+        }
+        .difficulty-btn {
+            display: block;
+            width: 100%;
+            margin: 15px 0;
+            padding: 20px 40px;
+            font-size: 24px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+        .difficulty-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .difficulty-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        .difficulty-btn span {
+            position: relative;
+            z-index: 1;
+        }
+        .easy {
+            background: linear-gradient(135deg, #52c234 0%, #61e786 100%);
+            color: white;
+            box-shadow: 0 5px 20px rgba(82, 194, 52, 0.5);
+        }
+        .easy:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(82, 194, 52, 0.7);
+        }
+        .medium {
+            background: linear-gradient(135deg, #f09819 0%, #ff5858 100%);
+            color: white;
+            box-shadow: 0 5px 20px rgba(240, 152, 25, 0.5);
+        }
+        .medium:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(240, 152, 25, 0.7);
+        }
+        .hard {
+            background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);
+            color: white;
+            box-shadow: 0 5px 20px rgba(238, 9, 121, 0.5);
+        }
+        .hard:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(238, 9, 121, 0.7);
+        }
+        .insane {
+            background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%);
+            color: white;
+            box-shadow: 0 5px 20px rgba(142, 45, 226, 0.5);
+            animation: pulse 2s infinite;
+        }
+        .insane:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(142, 45, 226, 0.7);
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 5px 20px rgba(142, 45, 226, 0.5); }
+            50% { box-shadow: 0 5px 30px rgba(142, 45, 226, 0.9); }
+        }
+        .start-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 26px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.5);
+            font-weight: bold;
+        }
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.7);
+        }
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid #4a9eff;
+            padding: 12px 30px;
+            font-size: 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+        .back-btn:hover {
+            background: rgba(74, 158, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        #gameOver {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            color: #fff;
+            display: none;
+            border: 2px solid #4a9eff;
+            box-shadow: 0 0 40px rgba(74, 158, 255, 0.7);
+            z-index: 100;
+        }
+        #gameOver h2 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #ff4a4a;
+            text-shadow: 0 0 20px #ff4a4a;
+        }
+        #gameOver p {
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+        .difficulty-info {
+            font-size: 14px;
+            color: #aaa;
+            margin-top: 5px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas" width="1280" height="720"></canvas>
+        <div id="ui" class="hidden">
+            <div>Очки: <span id="score">0</span></div>
+            <div>Жизни: <span id="lives">3</span></div>
+            <div>Сложность: <span id="difficultyDisplay"></span></div>
+        </div>
+        
+        <div id="mainMenu" class="menu">
+            <h1>КОСМИЧЕСКИЙ ШУТЕР</h1>
+            <p>Защити галактику от вражеских кораблей!</p>
+            <button class="start-btn" onclick="showDifficultyMenu()">🚀 НАЧАТЬ ИГРУ</button>
+            <button class="start-btn" onclick="toggleMusic()" id="musicBtn" style="margin-top: 15px; font-size: 20px; padding: 12px 30px;">
+                🔊 Включить музыку
+            </button>
+        </div>
+
+        <div id="difficultyMenu" class="menu hidden">
+            <h2>ВЫБЕРИТЕ СЛОЖНОСТЬ</h2>
+            <button class="difficulty-btn easy" onclick="selectDifficulty('easy')">
+                <span>😊 ЛЁГКАЯ</span>
+                <div class="difficulty-info">Враги медленные, много жизней</div>
+            </button>
+            <button class="difficulty-btn medium" onclick="selectDifficulty('medium')">
+                <span>😎 СРЕДНЯЯ</span>
+                <div class="difficulty-info">Сбалансированная игра</div>
+            </button>
+            <button class="difficulty-btn hard" onclick="selectDifficulty('hard')">
+                <span>😤 СЛОЖНАЯ</span>
+                <div class="difficulty-info">Враги быстрые и опасные</div>
+            </button>
+            <button class="difficulty-btn insane" onclick="selectDifficulty('insane')">
+                <span>💀 БЕЗУМНАЯ</span>
+                <div class="difficulty-info">Только для профессионалов!</div>
+            </button>
+            <button class="back-btn" onclick="showMainMenu()">← Назад</button>
+        </div>
+
+        <div id="gameOver">
+            <h2>ИГРА ОКОНЧЕНА</h2>
+            <p>Ваш счёт: <span id="finalScore">0</span></p>
+            <button class="start-btn" onclick="showMainMenu()">В главное меню</button>
+        </div>
+
+        <div id="pauseMenu" class="menu" style="display: none;">
+            <h2 style="font-size: 48px; color: #4a9eff; text-shadow: 0 0 20px #4a9eff; margin-bottom: 30px;">ПАУЗА</h2>
+            <button class="start-btn" onclick="resumeGame()" style="margin-bottom: 15px;">▶️ Продолжить</button>
+            <button class="start-btn" onclick="exitToMenu()" style="background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);">🏠 Выйти в меню</button>
+            <p style="color: #aaa; margin-top: 20px; font-size: 16px;">Нажмите Esc чтобы продолжить</p>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        let gameRunning = false;
+        let score = 0;
+        let lives = 3;
+        let enemies = [];
+        let bullets = [];
+        let particles = [];
+        let stars = [];
+        let keys = {};
+        let difficulty = 'medium';
+        let difficultySettings = {
+            easy: { enemySpeed: 1, spawnRate: 2000, lives: 5, enemySpawnChance: 0.7 },
+            medium: { enemySpeed: 2, spawnRate: 1500, lives: 3, enemySpawnChance: 1 },
+            hard: { enemySpeed: 3.5, spawnRate: 1000, lives: 2, enemySpawnChance: 1.5 },
+            insane: { enemySpeed: 5, spawnRate: 600, lives: 1, enemySpawnChance: 2 }
+        };
+        let spawnInterval = null;
+        let musicEnabled = false;
+        let gamePaused = false;
+
+        const sounds = {
+            music: new Audio('music.mp3'),
+            click: new Audio('click.mp3'),
+            gameover: new Audio('gameover.mp3'),
+            piu: new Audio('piu.mp3'),
+            hit: new Audio('hit.mp3'),
+            oi: new Audio('oi.mp3')
+        };
+
+        sounds.music.loop = true;
+        sounds.music.volume = 0.3;
+
+        function playSound(soundName) {
+            try {
+                if (sounds[soundName]) {
+                    sounds[soundName].currentTime = 0;
+                    sounds[soundName].play().catch(e => {});
+                }
+            } catch (e) {}
+        }
+
+        for (let i = 0; i < 100; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2,
+                speed: Math.random() * 0.5 + 0.1
+            });
+        }
+
+        const player = {
+            x: canvas.width / 2,
+            y: canvas.height - 80,
+            width: 40,
+            height: 40,
+            speed: 5,
+            color: '#4a9eff'
+        };
+
+        function showMainMenu() {
+            playSound('click');
+            document.getElementById('mainMenu').classList.remove('hidden');
+            document.getElementById('difficultyMenu').classList.add('hidden');
+            document.getElementById('gameOver').style.display = 'none';
+            document.getElementById('ui').classList.add('hidden');
+            gameRunning = false;
+            if (spawnInterval) clearInterval(spawnInterval);
+        }
+
+        function showDifficultyMenu() {
+            playSound('click');
+            document.getElementById('mainMenu').classList.add('hidden');
+            document.getElementById('difficultyMenu').classList.remove('hidden');
+            
+            if (musicEnabled && sounds.music.paused) {
+                sounds.music.play().catch(e => {});
+            }
+        }
+
+        function selectDifficulty(diff) {
+            playSound('click');
+            difficulty = diff;
+            startGame();
+        }
+
+        function startGame() {
+            document.getElementById('difficultyMenu').classList.add('hidden');
+            document.getElementById('ui').classList.remove('hidden');
+            
+            if (musicEnabled && sounds.music.paused) {
+                sounds.music.play().catch(e => {});
+            }
+            
+            gameRunning = true;
+            score = 0;
+            lives = difficultySettings[difficulty].lives;
+            enemies = [];
+            bullets = [];
+            particles = [];
+            player.x = canvas.width / 2;
+            player.y = canvas.height - 80;
+            
+            document.getElementById('score').textContent = score;
+            document.getElementById('lives').textContent = lives;
+            document.getElementById('difficultyDisplay').textContent = 
+                difficulty === 'easy' ? 'Лёгкая' :
+                difficulty === 'medium' ? 'Средняя' :
+                difficulty === 'hard' ? 'Сложная' : 'Безумная';
+            
+            if (spawnInterval) clearInterval(spawnInterval);
+            spawnInterval = setInterval(() => {
+                if (gameRunning && !gamePaused) {
+                    for (let i = 0; i < difficultySettings[difficulty].enemySpawnChance; i++) {
+                        if (Math.random() < 0.8) {
+                            spawnEnemy();
+                        }
+                    }
+                }
+            }, difficultySettings[difficulty].spawnRate);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && gameRunning) {
+                togglePause();
+                return;
+            }
+            
+            keys[e.key] = true;
+            if (e.key === ' ' && gameRunning && !gamePaused) {
+                shootBullet();
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            keys[e.key] = false;
+        });
+
+        function shootBullet() {
+            playSound('piu');
+            bullets.push({
+                x: player.x + player.width / 2 - 2,
+                y: player.y,
+                width: 4,
+                height: 15,
+                speed: 8,
+                color: '#ffff00'
+            });
+        }
+
+        function spawnEnemy() {
+            if (!gameRunning) return;
+            enemies.push({
+                x: Math.random() * (canvas.width - 40),
+                y: -40,
+                width: 40,
+                height: 40,
+                speed: Math.random() * difficultySettings[difficulty].enemySpeed + difficultySettings[difficulty].enemySpeed * 0.5,
+                color: '#ff4a4a'
+            });
+        }
+
+        function createParticles(x, y, color) {
+            for (let i = 0; i < 15; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 6,
+                    vy: (Math.random() - 0.5) * 6,
+                    size: Math.random() * 3 + 2,
+                    color: color,
+                    life: 30
+                });
+            }
+        }
+
+        function drawPlayer() {
+            ctx.save();
+            ctx.fillStyle = player.color;
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = player.color;
+            
+            ctx.beginPath();
+            ctx.moveTo(player.x + player.width / 2, player.y);
+            ctx.lineTo(player.x, player.y + player.height);
+            ctx.lineTo(player.x + player.width / 2, player.y + player.height - 10);
+            ctx.lineTo(player.x + player.width, player.y + player.height);
+            ctx.closePath();
+            ctx.fill();
+            
+            ctx.fillStyle = '#00ffff';
+            ctx.beginPath();
+            ctx.arc(player.x + player.width / 2, player.y + 15, 8, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.restore();
+        }
+
+        function drawEnemy(enemy) {
+            ctx.save();
+            ctx.fillStyle = enemy.color;
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = enemy.color;
+            
+            ctx.beginPath();
+            ctx.moveTo(enemy.x + enemy.width / 2, enemy.y + enemy.height);
+            ctx.lineTo(enemy.x, enemy.y);
+            ctx.lineTo(enemy.x + enemy.width, enemy.y);
+            ctx.closePath();
+            ctx.fill();
+            
+            ctx.restore();
+        }
+
+        function drawBullet(bullet) {
+            ctx.save();
+            ctx.fillStyle = bullet.color;
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = bullet.color;
+            ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+            ctx.restore();
+        }
+
+        function drawStars() {
+            ctx.save();
+            stars.forEach(star => {
+                ctx.fillStyle = 'white';
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                star.y += star.speed;
+                if (star.y > canvas.height) {
+                    star.y = 0;
+                    star.x = Math.random() * canvas.width;
+                }
+            });
+            ctx.restore();
+        }
+
+        function updateParticles() {
+            particles.forEach((p, index) => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.life--;
+                
+                ctx.save();
+                ctx.globalAlpha = p.life / 30;
+                ctx.fillStyle = p.color;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+                
+                if (p.life <= 0) {
+                    particles.splice(index, 1);
+                }
+            });
+        }
+
+        function checkCollision(rect1, rect2) {
+            return rect1.x < rect2.x + rect2.width &&
+                   rect1.x + rect1.width > rect2.x &&
+                   rect1.y < rect2.y + rect2.height &&
+                   rect1.y + rect1.height > rect2.y;
+        }
+
+        function updateGame() {
+            if (!gameRunning || gamePaused) return;
+
+            if (keys['ArrowLeft'] && player.x > 0) {
+                player.x -= player.speed;
+            }
+            if (keys['ArrowRight'] && player.x < canvas.width - player.width) {
+                player.x += player.speed;
+            }
+
+            bullets.forEach((bullet, index) => {
+                bullet.y -= bullet.speed;
+                if (bullet.y < 0) {
+                    bullets.splice(index, 1);
+                }
+            });
+
+            enemies.forEach((enemy, index) => {
+                enemy.y += enemy.speed;
+                
+                if (checkCollision(player, enemy)) {
+                    enemies.splice(index, 1);
+                    lives--;
+                    playSound('oi');
+                    createParticles(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2, '#ff4a4a');
+                    document.getElementById('lives').textContent = lives;
+                    
+                    if (lives <= 0) {
+                        endGame();
+                    }
+                }
+                
+                bullets.forEach((bullet, bIndex) => {
+                    if (checkCollision(bullet, enemy)) {
+                        enemies.splice(index, 1);
+                        bullets.splice(bIndex, 1);
+                        score += 10;
+                        playSound('hit');
+                        createParticles(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2, '#ffff00');
+                        document.getElementById('score').textContent = score;
+                    }
+                });
+                
+                if (enemy.y > canvas.height) {
+                    enemies.splice(index, 1);
+                }
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            drawStars();
+            if (gameRunning) {
+                drawPlayer();
+                enemies.forEach(drawEnemy);
+                bullets.forEach(drawBullet);
+            }
+            updateParticles();
+        }
+
+        function gameLoop() {
+            updateGame();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function endGame() {
+            gameRunning = false;
+            if (spawnInterval) clearInterval(spawnInterval);
+            playSound('gameover');
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('gameOver').style.display = 'block';
+        }
+
+        function toggleMusic() {
+            playSound('click');
+            const musicBtn = document.getElementById('musicBtn');
+            
+            if (musicEnabled) {
+                musicEnabled = false;
+                sounds.music.pause();
+                sounds.music.currentTime = 0;
+                musicBtn.innerHTML = '🔊 Включить музыку';
+            } else {
+                musicEnabled = true;
+                sounds.music.play().catch(e => {});
+                musicBtn.innerHTML = '🔇 Выключить музыку';
+            }
+        }
+
+        function togglePause() {
+            playSound('click');
+            gamePaused = !gamePaused;
+            
+            if (gamePaused) {
+                document.getElementById('pauseMenu').style.display = 'block';
+                if (musicEnabled) {
+                    sounds.music.pause();
+                }
+            } else {
+                document.getElementById('pauseMenu').style.display = 'none';
+                if (musicEnabled) {
+                    sounds.music.play().catch(e => {});
+                }
+            }
+        }
+
+        function resumeGame() {
+            playSound('click');
+            gamePaused = false;
+            document.getElementById('pauseMenu').style.display = 'none';
+            if (musicEnabled) {
+                sounds.music.play().catch(e => {});
+            }
+        }
+
+        function exitToMenu() {
+            playSound('click');
+            gamePaused = false;
+            document.getElementById('pauseMenu').style.display = 'none';
+            showMainMenu();
+        }
+
+        gameLoop();
+    </script>
+</body>
+</html>
