@@ -226,61 +226,142 @@
         .hidden {
             display: none;
         }
+        #languageMenu {
+            max-height: 70vh;
+            overflow-y: auto;
+            padding: 30px 40px;
+        }
+        #languageMenu h2 {
+            font-size: 42px;
+            margin-bottom: 25px;
+            color: #4a9eff;
+            text-shadow: 0 0 20px #4a9eff;
+        }
+        .language-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .language-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            font-size: 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 3px 15px rgba(102, 126, 234, 0.4);
+            font-weight: bold;
+        }
+        .language-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.6);
+        }
+        .language-btn.active {
+            background: linear-gradient(135deg, #52c234 0%, #61e786 100%);
+            box-shadow: 0 3px 15px rgba(82, 194, 52, 0.6);
+        }
+        #languageMenu::-webkit-scrollbar {
+            width: 10px;
+        }
+        #languageMenu::-webkit-scrollbar-track {
+            background: rgba(74, 158, 255, 0.1);
+            border-radius: 10px;
+        }
+        #languageMenu::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+        }
+        #languageMenu::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
     </style>
 </head>
 <body>
     <div id="gameContainer">
         <canvas id="gameCanvas" width="1280" height="720"></canvas>
         <div id="ui" class="hidden">
-            <div>Очки: <span id="score">0</span></div>
-            <div>Жизни: <span id="lives">3</span></div>
-            <div>Сложность: <span id="difficultyDisplay"></span></div>
+            <div><span class="lang-score">Очки</span>: <span id="score">0</span></div>
+            <div><span class="lang-lives">Жизни</span>: <span id="lives">3</span></div>
+            <div><span class="lang-difficulty">Сложность</span>: <span id="difficultyDisplay"></span></div>
         </div>
         
         <div id="mainMenu" class="menu">
-            <h1>КОСМИЧЕСКИЙ ШУТЕР</h1>
-            <p>Защити галактику от вражеских кораблей!</p>
-            <button class="start-btn" onclick="showDifficultyMenu()">🚀 НАЧАТЬ ИГРУ</button>
+            <h1 class="lang-title">КОСМИЧЕСКИЙ ШУТЕР</h1>
+            <p class="lang-subtitle">Защити галактику от вражеских кораблей!</p>
+            <button class="start-btn" onclick="showDifficultyMenu()"><span class="lang-start">🚀 НАЧАТЬ ИГРУ</span></button>
             <button class="start-btn" onclick="toggleMusic()" id="musicBtn" style="margin-top: 15px; font-size: 20px; padding: 12px 30px;">
-                🔊 Включить музыку
+                <span class="lang-music-on">🔊 Включить музыку</span>
             </button>
-            <p style="margin-top: 20px; font-size: 14px; opacity: 0.8;">
+            <button class="start-btn" onclick="showLanguageMenu()" style="margin-top: 15px; font-size: 20px; padding: 12px 30px;">
+                <span class="lang-language">🌐 Язык</span>
+            </button>
+            <p style="margin-top: 20px; font-size: 14px; opacity: 0.8;" class="lang-hint">
             💡 Подсказка: Если нету иконки на сайте — нажмите <b>Windows: Ctrl + F5</b> или <b>Mac: Cmd + Shift + R</b>.
             </p>
         </div>
 
         <div id="difficultyMenu" class="menu hidden">
-            <h2>ВЫБЕРИТЕ СЛОЖНОСТЬ</h2>
+            <h2 class="lang-select-difficulty">ВЫБЕРИТЕ СЛОЖНОСТЬ</h2>
             <button class="difficulty-btn easy" onclick="selectDifficulty('easy')">
-                <span>😊 ЛЁГКАЯ</span>
-                <div class="difficulty-info">Враги медленные, много жизней</div>
+                <span><span class="lang-easy">😊 ЛЁГКАЯ</span></span>
+                <div class="difficulty-info lang-easy-desc">Враги медленные, много жизней</div>
             </button>
             <button class="difficulty-btn medium" onclick="selectDifficulty('medium')">
-                <span>😎 СРЕДНЯЯ</span>
-                <div class="difficulty-info">Сбалансированная игра</div>
+                <span><span class="lang-medium">😎 СРЕДНЯЯ</span></span>
+                <div class="difficulty-info lang-medium-desc">Сбалансированная игра</div>
             </button>
             <button class="difficulty-btn hard" onclick="selectDifficulty('hard')">
-                <span>😤 СЛОЖНАЯ</span>
-                <div class="difficulty-info">Враги быстрые и опасные</div>
+                <span><span class="lang-hard">😤 СЛОЖНАЯ</span></span>
+                <div class="difficulty-info lang-hard-desc">Враги быстрые и опасные</div>
             </button>
             <button class="difficulty-btn insane" onclick="selectDifficulty('insane')">
-                <span>💀 БЕЗУМНАЯ</span>
-                <div class="difficulty-info">Только для профессионалов!</div>
+                <span><span class="lang-insane">💀 БЕЗУМНАЯ</span></span>
+                <div class="difficulty-info lang-insane-desc">Только для профессионалов!</div>
             </button>
-            <button class="back-btn" onclick="showMainMenu()">← Назад</button>
+            <button class="back-btn" onclick="showMainMenu()"><span class="lang-back">← Назад</span></button>
+        </div>
+
+        <div id="languageMenu" class="menu hidden">
+            <h2 class="lang-select-language">ВЫБОР ЯЗЫКА</h2>
+            <div class="language-grid">
+                <button class="language-btn active" onclick="selectLanguage('ru')">🇷🇺 Русский</button>
+                <button class="language-btn" onclick="selectLanguage('uk')">🇺🇦 Українська</button>
+                <button class="language-btn" onclick="selectLanguage('be')">🇧🇾 Беларуская</button>
+                <button class="language-btn" onclick="selectLanguage('kk')">🇰🇿 Қазақша</button>
+                <button class="language-btn" onclick="selectLanguage('hy')">🇦🇲 Հայերեն</button>
+                <button class="language-btn" onclick="selectLanguage('zh')">🇨🇳 中文</button>
+                <button class="language-btn" onclick="selectLanguage('ja')">🇯🇵 日本語</button>
+                <button class="language-btn" onclick="selectLanguage('en')">🇺🇸 English</button>
+                <button class="language-btn" onclick="selectLanguage('es')">🇪🇸 Español</button>
+                <button class="language-btn" onclick="selectLanguage('ar')">🇸🇦 العربية</button>
+                <button class="language-btn" onclick="selectLanguage('fr')">🇫🇷 Français</button>
+                <button class="language-btn" onclick="selectLanguage('de')">🇩🇪 Deutsch</button>
+                <button class="language-btn" onclick="selectLanguage('it')">🇮🇹 Italiano</button>
+                <button class="language-btn" onclick="selectLanguage('pt')">🇵🇹 Português</button>
+                <button class="language-btn" onclick="selectLanguage('pl')">🇵🇱 Polski</button>
+                <button class="language-btn" onclick="selectLanguage('tr')">🇹🇷 Türkçe</button>
+                <button class="language-btn" onclick="selectLanguage('ko')">🇰🇷 한국어</button>
+                <button class="language-btn" onclick="selectLanguage('hi')">🇮🇳 हिन्दी</button>
+                <button class="language-btn" onclick="selectLanguage('th')">🇹🇭 ไทย</button>
+                <button class="language-btn" onclick="selectLanguage('vi')">🇻🇳 Tiếng Việt</button>
+            </div>
+            <button class="back-btn" onclick="showMainMenu()"><span class="lang-back">← Назад</span></button>
         </div>
 
         <div id="gameOver">
-            <h2>ИГРА ОКОНЧЕНА</h2>
-            <p>Ваш счёт: <span id="finalScore">0</span></p>
-            <button class="start-btn" onclick="showMainMenu()">В главное меню</button>
+            <h2 class="lang-game-over">ИГРА ОКОНЧЕНА</h2>
+            <p><span class="lang-your-score">Ваш счёт</span>: <span id="finalScore">0</span></p>
+            <button class="start-btn" onclick="showMainMenu()"><span class="lang-main-menu">В главное меню</span></button>
         </div>
 
         <div id="pauseMenu" class="menu" style="display: none;">
-            <h2 style="font-size: 48px; color: #4a9eff; text-shadow: 0 0 20px #4a9eff; margin-bottom: 30px;">ПАУЗА</h2>
-            <button class="start-btn" onclick="resumeGame()" style="margin-bottom: 15px;">▶️ Продолжить</button>
-            <button class="start-btn" onclick="exitToMenu()" style="background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);">🏠 Выйти в меню</button>
-            <p style="color: #aaa; margin-top: 20px; font-size: 16px;">Нажмите Esc чтобы продолжить</p>
+            <h2 style="font-size: 48px; color: #4a9eff; text-shadow: 0 0 20px #4a9eff; margin-bottom: 30px;" class="lang-pause">ПАУЗА</h2>
+            <button class="start-btn" onclick="resumeGame()" style="margin-bottom: 15px;"><span class="lang-continue">▶️ Продолжить</span></button>
+            <button class="start-btn" onclick="exitToMenu()" style="background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);"><span class="lang-exit">🏠 Выйти в меню</span></button>
+            <p style="color: #aaa; margin-top: 20px; font-size: 16px;" class="lang-pause-hint">Нажмите Esc чтобы продолжить</p>
         </div>
     </div>
 
@@ -297,6 +378,7 @@
         let stars = [];
         let keys = {};
         let difficulty = 'medium';
+        let currentLanguage = 'ru';
         let difficultySettings = {
             easy: { enemySpeed: 1, spawnRate: 2000, lives: 5, enemySpawnChance: 0.7 },
             medium: { enemySpeed: 2, spawnRate: 1500, lives: 3, enemySpawnChance: 1 },
@@ -306,6 +388,609 @@
         let spawnInterval = null;
         let musicEnabled = false;
         let gamePaused = false;
+
+        const translations = {
+            ru: {
+                title: 'КОСМИЧЕСКИЙ ШУТЕР',
+                subtitle: 'Защити галактику от вражеских кораблей!',
+                start: '🚀 НАЧАТЬ ИГРУ',
+                musicOn: '🔊 Включить музыку',
+                musicOff: '🔇 Выключить музыку',
+                language: '🌐 Язык',
+                hint: '💡 Подсказка: Если нету иконки на сайте — нажмите <b>Windows: Ctrl + F5</b> или <b>Mac: Cmd + Shift + R</b>.',
+                selectDifficulty: 'ВЫБЕРИТЕ СЛОЖНОСТЬ',
+                easy: '😊 ЛЁГКАЯ',
+                easyDesc: 'Враги медленные, много жизней',
+                medium: '😎 СРЕДНЯЯ',
+                mediumDesc: 'Сбалансированная игра',
+                hard: '😤 СЛОЖНАЯ',
+                hardDesc: 'Враги быстрые и опасные',
+                insane: '💀 БЕЗУМНАЯ',
+                insaneDesc: 'Только для профессионалов!',
+                back: '← Назад',
+                selectLanguage: 'ВЫБОР ЯЗЫКА',
+                gameOver: 'ИГРА ОКОНЧЕНА',
+                yourScore: 'Ваш счёт',
+                mainMenu: 'В главное меню',
+                pause: 'ПАУЗА',
+                continue: '▶️ Продолжить',
+                exit: '🏠 Выйти в меню',
+                pauseHint: 'Нажмите Esc чтобы продолжить',
+                score: 'Очки',
+                lives: 'Жизни',
+                difficulty: 'Сложность'
+            },
+            uk: {
+                title: 'КОСМІЧНИЙ ШУТЕР',
+                subtitle: 'Захисти галактику від ворожих кораблів!',
+                start: '🚀 ПОЧАТИ ГРУ',
+                musicOn: '🔊 Увімкнути музику',
+                musicOff: '🔇 Вимкнути музику',
+                language: '🌐 Мова',
+                hint: '💡 Підказка: Якщо немає іконки на сайті — натисніть <b>Windows: Ctrl + F5</b> або <b>Mac: Cmd + Shift + R</b>.',
+                selectDifficulty: 'ОБЕРІТЬ СКЛАДНІСТЬ',
+                easy: '😊 ЛЕГКА',
+                easyDesc: 'Вороги повільні, багато життів',
+                medium: '😎 СЕРЕДНЯ',
+                mediumDesc: 'Збалансована гра',
+                hard: '😤 СКЛАДНА',
+                hardDesc: 'Вороги швидкі і небезпечні',
+                insane: '💀 БОЖЕВІЛЬНА',
+                insaneDesc: 'Тільки для професіоналів!',
+                back: '← Назад',
+                selectLanguage: 'ВИБІР МОВИ',
+                gameOver: 'ГРА ЗАКІНЧЕНА',
+                yourScore: 'Ваш рахунок',
+                mainMenu: 'В головне меню',
+                pause: 'ПАУЗА',
+                continue: '▶️ Продовжити',
+                exit: '🏠 Вийти в меню',
+                pauseHint: 'Натисніть Esc щоб продовжити',
+                score: 'Очки',
+                lives: 'Життя',
+                difficulty: 'Складність'
+            },
+            be: {
+                title: 'КАСМІЧНЫ ШУТЭР',
+                subtitle: 'Абараняй галактыку ад ворагаў!',
+                start: '🚀 ПАЧАЦЬ ГРУ',
+                musicOn: '🔊 Уключыць музыку',
+                musicOff: '🔇 Выключыць музыку',
+                language: '🌐 Мова',
+                hint: '💡 Падказка: Калі няма іконкі на сайце — націсніце <b>Windows: Ctrl + F5</b> або <b>Mac: Cmd + Shift + R</b>.',
+                selectDifficulty: 'ВЫБЕРЫЦЕ СКЛАДАНАСЦЬ',
+                easy: '😊 ЛЁГКАЯ',
+                easyDesc: 'Ворагі павольныя, шмат жыццяў',
+                medium: '😎 СЯРЭДНЯЯ',
+                mediumDesc: 'Збалансаваная гульня',
+                hard: '😤 СКЛАДАНАЯ',
+                hardDesc: 'Ворагі хуткія і небяспечныя',
+                insane: '💀 ШАЛЁНАЯ',
+                insaneDesc: 'Толькі для прафесіяналаў!',
+                back: '← Назад',
+                selectLanguage: 'ВЫБАР МОВЫ',
+                gameOver: 'ГУЛЬНЯ СКОНЧАНА',
+                yourScore: 'Ваш лік',
+                mainMenu: 'У галоўнае меню',
+                pause: 'ПАЎЗА',
+                continue: '▶️ Працягнуць',
+                exit: '🏠 Выйсці ў меню',
+                pauseHint: 'Націсніце Esc каб працягнуць',
+                score: 'Балы',
+                lives: 'Жыцці',
+                difficulty: 'Складанасць'
+            },
+            kk: {
+                title: 'ҒАРЫШТЫҚ ШУТЕР',
+                subtitle: 'Галактиканы жау кемелерінен қорға!',
+                start: '🚀 ОЙЫНДЫ БАСТАУ',
+                musicOn: '🔊 Музыканы қосу',
+                musicOff: '🔇 Музыканы өшіру',
+                language: '🌐 Тіл',
+                hint: '💡 Кеңес: Егер сайтта белгіше болмаса — басыңыз <b>Windows: Ctrl + F5</b> немесе <b>Mac: Cmd + Shift + R</b>.',
+                selectDifficulty: 'ҚИЫНДЫҚ ДЕҢГЕЙІН ТАҢДАҢЫЗ',
+                easy: '😊 ЖЕҢІЛ',
+                easyDesc: 'Жаулар баяу, көп өмір',
+                medium: '😎 ОРТАША',
+                mediumDesc: 'Теңдестірілген ойын',
+                hard: '😤 ҚИЫН',
+                hardDesc: 'Жаулар жылдам және қауіпті',
+                insane: '💀 ЕСАЛАҢ',
+                insaneDesc: 'Тек кәсіпқойларға арналған!',
+                back: '← Артқа',
+                selectLanguage: 'ТІЛДІ ТАҢДАУ',
+                gameOver: 'ОЙЫН АЯҚТАЛДЫ',
+                yourScore: 'Сіздің ұпайыңыз',
+                mainMenu: 'Басты мәзірге',
+                pause: 'КІДІРІС',
+                continue: '▶️ Жалғастыру',
+                exit: '🏠 Мәзірге шығу',
+                pauseHint: 'Жалғастыру үшін Esc басыңыз',
+                score: 'Ұпай',
+                lives: 'Өмір',
+                difficulty: 'Қиындық'
+            },
+            hy: {
+                title: 'ՏԻԵԶԵՐԱԿԱՆ ՇՈՒՏԵՐ',
+                subtitle: 'Պաշտպանիր գալակտիկան թշնամի նավերից!',
+                start: '🚀 ՍԿՍԵԼ ԽԱՂԸ',
+                musicOn: '🔊 Միացնել երաժշտությունը',
+                musicOff: '🔇 Անջատել երաժշտությունը',
+                language: '🌐 Լեզու',
+                hint: '💡 Հուշում: Եթե կայքում չկա պատկերակ — սեղմեք <b>Windows: Ctrl + F5</b> կամ <b>Mac: Cmd + Shift + R</b>.',
+                selectDifficulty: 'ԸՆՏՐԵՔ ԲԱՐԴՈՒԹՅՈՒՆԸ',
+                easy: '😊 ՀԵՇՏ',
+                easyDesc: 'Թշնամիները դանդաղ են, շատ կյանք',
+                medium: '😎 ՄԻՋԻՆ',
+                mediumDesc: 'Հավասարակշռված խաղ',
+                hard: '😤 ԲԱՐԴ',
+                hardDesc: 'Թշնամիները արագ և վտանգավոր են',
+                insane: '💀 ԽԵԼԱԳԱՐ',
+                insaneDesc: 'Միայն պրոֆեսիոնալների համար!',
+                back: '← Հետ',
+                selectLanguage: 'ԼԵԶՎԻ ԸՆՏՐՈՒԹՅՈՒՆ',
+                gameOver: 'ԽԱՂԸ ԱՎԱՐՏՎԱԾ Է',
+                yourScore: 'Ձեր միավորը',
+                mainMenu: 'Գլխավոր մենյու',
+                pause: 'ԴԱԴԱՐ',
+                continue: '▶️ Շարունակել',
+                exit: '🏠 Դուրս գալ մենյու',
+                pauseHint: 'Շարունակելու համար սեղմեք Esc',
+                score: 'Միավոր',
+                lives: 'Կյանք',
+                difficulty: 'Բարդություն'
+            },
+            zh: {
+                title: '太空射击游戏',
+                subtitle: '保护银河系免受敌舰攻击！',
+                start: '🚀 开始游戏',
+                musicOn: '🔊 开启音乐',
+                musicOff: '🔇 关闭音乐',
+                language: '🌐 语言',
+                hint: '💡 提示：如果网站没有图标 — 按 <b>Windows: Ctrl + F5</b> 或 <b>Mac: Cmd + Shift + R</b>。',
+                selectDifficulty: '选择难度',
+                easy: '😊 简单',
+                easyDesc: '敌人缓慢，生命值多',
+                medium: '😎 中等',
+                mediumDesc: '平衡游戏',
+                hard: '😤 困难',
+                hardDesc: '敌人快速且危险',
+                insane: '💀 疯狂',
+                insaneDesc: '仅供专业人士！',
+                back: '← 返回',
+                selectLanguage: '选择语言',
+                gameOver: '游戏结束',
+                yourScore: '您的得分',
+                mainMenu: '返回主菜单',
+                pause: '暂停',
+                continue: '▶️ 继续',
+                exit: '🏠 退出菜单',
+                pauseHint: '按 Esc 继续',
+                score: '分数',
+                lives: '生命',
+                difficulty: '难度'
+            },
+            ja: {
+                title: 'スペースシューター',
+                subtitle: '銀河を敵艦から守れ！',
+                start: '🚀 ゲーム開始',
+                musicOn: '🔊 音楽オン',
+                musicOff: '🔇 音楽オフ',
+                language: '🌐 言語',
+                hint: '💡 ヒント：サイトにアイコンがない場合 — <b>Windows: Ctrl + F5</b> または <b>Mac: Cmd + Shift + R</b> を押してください。',
+                selectDifficulty: '難易度を選択',
+                easy: '😊 簡単',
+                easyDesc: '敵は遅く、ライフが多い',
+                medium: '😎 普通',
+                mediumDesc: 'バランスのとれたゲーム',
+                hard: '😤 難しい',
+                hardDesc: '敵は速く危険',
+                insane: '💀 超難',
+                insaneDesc: 'プロ専用！',
+                back: '← 戻る',
+                selectLanguage: '言語選択',
+                gameOver: 'ゲームオーバー',
+                yourScore: 'あなたのスコア',
+                mainMenu: 'メインメニューへ',
+                pause: 'ポーズ',
+                continue: '▶️ 続ける',
+                exit: '🏠 メニューへ',
+                pauseHint: 'Esc を押して続ける',
+                score: 'スコア',
+                lives: 'ライフ',
+                difficulty: '難易度'
+            },
+            en: {
+                title: 'SPACE SHOOTER',
+                subtitle: 'Defend the galaxy from enemy ships!',
+                start: '🚀 START GAME',
+                musicOn: '🔊 Turn On Music',
+                musicOff: '🔇 Turn Off Music',
+                language: '🌐 Language',
+                hint: '💡 Tip: If the site icon is missing — press <b>Windows: Ctrl + F5</b> or <b>Mac: Cmd + Shift + R</b>.',
+                selectDifficulty: 'SELECT DIFFICULTY',
+                easy: '😊 EASY',
+                easyDesc: 'Enemies are slow, many lives',
+                medium: '😎 MEDIUM',
+                mediumDesc: 'Balanced game',
+                hard: '😤 HARD',
+                hardDesc: 'Enemies are fast and dangerous',
+                insane: '💀 INSANE',
+                insaneDesc: 'For professionals only!',
+                back: '← Back',
+                selectLanguage: 'SELECT LANGUAGE',
+                gameOver: 'GAME OVER',
+                yourScore: 'Your Score',
+                mainMenu: 'Main Menu',
+                pause: 'PAUSE',
+                continue: '▶️ Continue',
+                exit: '🏠 Exit to Menu',
+                pauseHint: 'Press Esc to continue',
+                score: 'Score',
+                lives: 'Lives',
+                difficulty: 'Difficulty'
+            },
+            es: {
+                title: 'TIRADOR ESPACIAL',
+                subtitle: '¡Defiende la galaxia de naves enemigas!',
+                start: '🚀 INICIAR JUEGO',
+                musicOn: '🔊 Activar Música',
+                musicOff: '🔇 Desactivar Música',
+                language: '🌐 Idioma',
+                hint: '💡 Consejo: Si falta el ícono del sitio — presione <b>Windows: Ctrl + F5</b> o <b>Mac: Cmd + Shift + R</b>.',
+                selectDifficulty: 'SELECCIONAR DIFICULTAD',
+                easy: '😊 FÁCIL',
+                easyDesc: 'Enemigos lentos, muchas vidas',
+                medium: '😎 MEDIO',
+                mediumDesc: 'Juego equilibrado',
+                hard: '😤 DIFÍCIL',
+                hardDesc: 'Enemigos rápidos y peligrosos',
+                insane: '💀 LOCO',
+                insaneDesc: '¡Solo para profesionales!',
+                back: '← Atrás',
+                selectLanguage: 'SELECCIONAR IDIOMA',
+                gameOver: 'JUEGO TERMINADO',
+                yourScore: 'Tu Puntuación',
+                mainMenu: 'Menú Principal',
+                pause: 'PAUSA',
+                continue: '▶️ Continuar',
+                exit: '🏠 Salir al Menú',
+                pauseHint: 'Presiona Esc para continuar',
+                score: 'Puntos',
+                lives: 'Vidas',
+                difficulty: 'Dificultad'
+            },
+            ar: {
+                title: 'لعبة إطلاق النار الفضائية',
+                subtitle: 'دافع عن المجرة من السفن المعادية!',
+                start: '🚀 ابدأ اللعبة',
+                musicOn: '🔊 تشغيل الموسيقى',
+                musicOff: '🔇 إيقاف الموسيقى',
+                language: '🌐 اللغة',
+                hint: '💡 تلميح: إذا كانت أيقونة الموقع مفقودة — اضغط <b>Windows: Ctrl + F5</b> أو <b>Mac: Cmd + Shift + R</b>.',
+                selectDifficulty: 'اختر الصعوبة',
+                easy: '😊 سهل',
+                easyDesc: 'الأعداء بطيئون، حياة كثيرة',
+                medium: '😎 متوسط',
+                mediumDesc: 'لعبة متوازنة',
+                hard: '😤 صعب',
+                hardDesc: 'الأعداء سريعون وخطرون',
+                insane: '💀 جنوني',
+                insaneDesc: 'للمحترفين فقط!',
+                back: '← رجوع',
+                selectLanguage: 'اختيار اللغة',
+                gameOver: 'انتهت اللعبة',
+                yourScore: 'نقاطك',
+                mainMenu: 'القائمة الرئيسية',
+                pause: 'إيقاف مؤقت',
+                continue: '▶️ متابعة',
+                exit: '🏠 خروج للقائمة',
+                pauseHint: 'اضغط Esc للمتابعة',
+                score: 'النقاط',
+                lives: 'الأرواح',
+                difficulty: 'الصعوبة'
+            },
+            fr: {
+                title: 'TIREUR SPATIAL',
+                subtitle: 'Défendez la galaxie contre les vaisseaux ennemis!',
+                start: '🚀 COMMENCER LE JEU',
+                musicOn: '🔊 Activer la Musique',
+                musicOff: '🔇 Désactiver la Musique',
+                language: '🌐 Langue',
+                hint: '💡 Astuce: Si l\'icône du site manque — appuyez sur <b>Windows: Ctrl + F5</b> ou <b>Mac: Cmd + Shift + R</b>.',
+                selectDifficulty: 'SÉLECTIONNER LA DIFFICULTÉ',
+                easy: '😊 FACILE',
+                easyDesc: 'Ennemis lents, beaucoup de vies',
+                medium: '😎 MOYEN',
+                mediumDesc: 'Jeu équilibré',
+                hard: '😤 DIFFICILE',
+                hardDesc: 'Ennemis rapides et dangereux',
+                insane: '💀 FOU',
+                insaneDesc: 'Pour les professionnels seulement!',
+                back: '← Retour',
+                selectLanguage: 'SÉLECTIONNER LA LANGUE',
+                gameOver: 'JEU TERMINÉ',
+                yourScore: 'Votre Score',
+                mainMenu: 'Menu Principal',
+                pause: 'PAUSE',
+                continue: '▶️ Continuer',
+                exit: '🏠 Sortir au Menu',
+                pauseHint: 'Appuyez sur Esc pour continuer',
+                score: 'Score',
+                lives: 'Vies',
+                difficulty: 'Difficulté'
+            },
+            de: {
+                title: 'WELTRAUM-SHOOTER',
+                subtitle: 'Verteidige die Galaxie vor feindlichen Schiffen!',
+                start: '🚀 SPIEL STARTEN',
+                musicOn: '🔊 Musik Einschalten',
+                musicOff: '🔇 Musik Ausschalten',
+                language: '🌐 Sprache',
+                hint: '💡 Tipp: Wenn das Site-Symbol fehlt — drücken Sie <b>Windows: Strg + F5</b> oder <b>Mac: Cmd + Umschalt + R</b>.',
+                selectDifficulty: 'SCHWIERIGKEIT WÄHLEN',
+                easy: '😊 EINFACH',
+                easyDesc: 'Feinde sind langsam, viele Leben',
+                medium: '😎 MITTEL',
+                mediumDesc: 'Ausgewogenes Spiel',
+                hard: '😤 SCHWER',
+                hardDesc: 'Feinde sind schnell und gefährlich',
+                insane: '💀 WAHNSINNIG',
+                insaneDesc: 'Nur für Profis!',
+                back: '← Zurück',
+                selectLanguage: 'SPRACHE WÄHLEN',
+                gameOver: 'SPIEL VORBEI',
+                yourScore: 'Deine Punktzahl',
+                mainMenu: 'Hauptmenü',
+                pause: 'PAUSE',
+                continue: '▶️ Fortsetzen',
+                exit: '🏠 Zum Menü',
+                pauseHint: 'Drücken Sie Esc zum Fortsetzen',
+                score: 'Punkte',
+                lives: 'Leben',
+                difficulty: 'Schwierigkeit'
+            },
+            it: {
+                title: 'SPARATUTTO SPAZIALE',
+                subtitle: 'Difendi la galassia dalle navi nemiche!',
+                start: '🚀 INIZIA GIOCO',
+                musicOn: '🔊 Attiva Musica',
+                musicOff: '🔇 Disattiva Musica',
+                language: '🌐 Lingua',
+                hint: '💡 Suggerimento: Se manca l\'icona del sito — premi <b>Windows: Ctrl + F5</b> o <b>Mac: Cmd + Shift + R</b>.',
+                selectDifficulty: 'SELEZIONA DIFFICOLTÀ',
+                easy: '😊 FACILE',
+                easyDesc: 'Nemici lenti, molte vite',
+                medium: '😎 MEDIO',
+                mediumDesc: 'Gioco bilanciato',
+                hard: '😤 DIFFICILE',
+                hardDesc: 'Nemici veloci e pericolosi',
+                insane: '💀 FOLLE',
+                insaneDesc: 'Solo per professionisti!',
+                back: '← Indietro',
+                selectLanguage: 'SELEZIONA LINGUA',
+                gameOver: 'GIOCO FINITO',
+                yourScore: 'Il Tuo Punteggio',
+                mainMenu: 'Menu Principale',
+                pause: 'PAUSA',
+                continue: '▶️ Continua',
+                exit: '🏠 Esci al Menu',
+                pauseHint: 'Premi Esc per continuare',
+                score: 'Punteggio',
+                lives: 'Vite',
+                difficulty: 'Difficoltà'
+            },
+            pt: {
+                title: 'ATIRADOR ESPACIAL',
+                subtitle: 'Defenda a galáxia de naves inimigas!',
+                start: '🚀 COMEÇAR JOGO',
+                musicOn: '🔊 Ligar Música',
+                musicOff: '🔇 Desligar Música',
+                language: '🌐 Idioma',
+                hint: '💡 Dica: Se o ícone do site estiver faltando — pressione <b>Windows: Ctrl + F5</b> ou <b>Mac: Cmd + Shift + R</b>.',
+                selectDifficulty: 'SELECIONAR DIFICULDADE',
+                easy: '😊 FÁCIL',
+                easyDesc: 'Inimigos lentos, muitas vidas',
+                medium: '😎 MÉDIO',
+                mediumDesc: 'Jogo equilibrado',
+                hard: '😤 DIFÍCIL',
+                hardDesc: 'Inimigos rápidos e perigosos',
+                insane: '💀 INSANO',
+                insaneDesc: 'Apenas para profissionais!',
+                back: '← Voltar',
+                selectLanguage: 'SELECIONAR IDIOMA',
+                gameOver: 'FIM DE JOGO',
+                yourScore: 'Sua Pontuação',
+                mainMenu: 'Menu Principal',
+                pause: 'PAUSA',
+                continue: '▶️ Continuar',
+                exit: '🏠 Sair para o Menu',
+                pauseHint: 'Pressione Esc para continuar',
+                score: 'Pontos',
+                lives: 'Vidas',
+                difficulty: 'Dificuldade'
+            },
+            pl: {
+                title: 'STRZELANKA KOSMICZNA',
+                subtitle: 'Obroń galaktykę przed wrogimi statkami!',
+                start: '🚀 ROZPOCZNIJ GRĘ',
+                musicOn: '🔊 Włącz Muzykę',
+                musicOff: '🔇 Wyłącz Muzykę',
+                language: '🌐 Język',
+                hint: '💡 Wskazówka: Jeśli brakuje ikony strony — naciśnij <b>Windows: Ctrl + F5</b> lub <b>Mac: Cmd + Shift + R</b>.',
+                selectDifficulty: 'WYBIERZ TRUDNOŚĆ',
+                easy: '😊 ŁATWY',
+                easyDesc: 'Wrogowie wolni, dużo żyć',
+                medium: '😎 ŚREDNI',
+                mediumDesc: 'Zrównoważona gra',
+                hard: '😤 TRUDNY',
+                hardDesc: 'Wrogowie szybcy i niebezpieczni',
+                insane: '💀 SZALONY',
+                insaneDesc: 'Tylko dla profesjonalistów!',
+                back: '← Wstecz',
+                selectLanguage: 'WYBIERZ JĘZYK',
+                gameOver: 'KONIEC GRY',
+                yourScore: 'Twój Wynik',
+                mainMenu: 'Menu Główne',
+                pause: 'PAUZA',
+                continue: '▶️ Kontynuuj',
+                exit: '🏠 Wyjdź do Menu',
+                pauseHint: 'Naciśnij Esc aby kontynuować',
+                score: 'Wynik',
+                lives: 'Życia',
+                difficulty: 'Trudność'
+            },
+            tr: {
+                title: 'UZAY ATICI',
+                subtitle: 'Galaksiyi düşman gemilerden savun!',
+                start: '🚀 OYUNU BAŞLAT',
+                musicOn: '🔊 Müziği Aç',
+                musicOff: '🔇 Müziği Kapat',
+                language: '🌐 Dil',
+                hint: '💡 İpucu: Site ikonu eksikse — <b>Windows: Ctrl + F5</b> veya <b>Mac: Cmd + Shift + R</b> tuşuna basın.',
+                selectDifficulty: 'ZORLUK SEÇİN',
+                easy: '😊 KOLAY',
+                easyDesc: 'Düşmanlar yavaş, çok can',
+                medium: '😎 ORTA',
+                mediumDesc: 'Dengeli oyun',
+                hard: '😤 ZOR',
+                hardDesc: 'Düşmanlar hızlı ve tehlikeli',
+                insane: '💀 DELİ',
+                insaneDesc: 'Sadece profesyoneller için!',
+                back: '← Geri',
+                selectLanguage: 'DİL SEÇİMİ',
+                gameOver: 'OYUN BİTTİ',
+                yourScore: 'Puanınız',
+                mainMenu: 'Ana Menü',
+                pause: 'DURAKLAT',
+                continue: '▶️ Devam Et',
+                exit: '🏠 Menüye Çık',
+                pauseHint: 'Devam etmek için Esc\'ye basın',
+                score: 'Puan',
+                lives: 'Can',
+                difficulty: 'Zorluk'
+            },
+            ko: {
+                title: '우주 슈터',
+                subtitle: '적 함선으로부터 은하계를 방어하세요!',
+                start: '🚀 게임 시작',
+                musicOn: '🔊 음악 켜기',
+                musicOff: '🔇 음악 끄기',
+                language: '🌐 언어',
+                hint: '💡 팁: 사이트 아이콘이 없으면 — <b>Windows: Ctrl + F5</b> 또는 <b>Mac: Cmd + Shift + R</b>를 누르세요.',
+                selectDifficulty: '난이도 선택',
+                easy: '😊 쉬움',
+                easyDesc: '적이 느리고 생명이 많음',
+                medium: '😎 보통',
+                mediumDesc: '균형잡힌 게임',
+                hard: '😤 어려움',
+                hardDesc: '적이 빠르고 위험함',
+                insane: '💀 미친',
+                insaneDesc: '전문가 전용!',
+                back: '← 뒤로',
+                selectLanguage: '언어 선택',
+                gameOver: '게임 오버',
+                yourScore: '당신의 점수',
+                mainMenu: '메인 메뉴',
+                pause: '일시정지',
+                continue: '▶️ 계속',
+                exit: '🏠 메뉴로 나가기',
+                pauseHint: '계속하려면 Esc를 누르세요',
+                score: '점수',
+                lives: '생명',
+                difficulty: '난이도'
+            },
+            hi: {
+                title: 'स्पेस शूटर',
+                subtitle: 'दुश्मन जहाजों से आकाशगंगा की रक्षा करें!',
+                start: '🚀 खेल शुरू करें',
+                musicOn: '🔊 संगीत चालू करें',
+                musicOff: '🔇 संगीत बंद करें',
+                language: '🌐 भाषा',
+                hint: '💡 सुझाव: यदि साइट आइकन गायब है — दबाएं <b>Windows: Ctrl + F5</b> या <b>Mac: Cmd + Shift + R</b>।',
+                selectDifficulty: 'कठिनाई चुनें',
+                easy: '😊 आसान',
+                easyDesc: 'दुश्मन धीमे हैं, कई जीवन',
+                medium: '😎 मध्यम',
+                mediumDesc: 'संतुलित खेल',
+                hard: '😤 कठिन',
+                hardDesc: 'दुश्मन तेज और खतरनाक हैं',
+                insane: '💀 पागल',
+                insaneDesc: 'केवल पेशेवरों के लिए!',
+                back: '← वापस',
+                selectLanguage: 'भाषा चुनें',
+                gameOver: 'खेल खत्म',
+                yourScore: 'आपका स्कोर',
+                mainMenu: 'मुख्य मेनू',
+                pause: 'रोकें',
+                continue: '▶️ जारी रखें',
+                exit: '🏠 मेनू में जाएं',
+                pauseHint: 'जारी रखने के लिए Esc दबाएं',
+                score: 'स्कोर',
+                lives: 'जीवन',
+                difficulty: 'कठिनाई'
+            },
+            th: {
+                title: 'เกมยิงอวกาศ',
+                subtitle: 'ปกป้องกาแล็กซีจากยานศัตรู!',
+                start: '🚀 เริ่มเกม',
+                musicOn: '🔊 เปิดเพลง',
+                musicOff: '🔇 ปิดเพลง',
+                language: '🌐 ภาษา',
+                hint: '💡 เคล็ดลับ: หากไอคอนไซต์หายไป — กด <b>Windows: Ctrl + F5</b> หรือ <b>Mac: Cmd + Shift + R</b>',
+                selectDifficulty: 'เลือกระดับความยาก',
+                easy: '😊 ง่าย',
+                easyDesc: 'ศัตรูช้า ชีวิตเยอะ',
+                medium: '😎 ปานกลาง',
+                mediumDesc: 'เกมที่สมดุล',
+                hard: '😤 ยาก',
+                hardDesc: 'ศัตรูเร็วและอันตราย',
+                insane: '💀 บ้า',
+                insaneDesc: 'สำหรับมืออาชีพเท่านั้น!',
+                back: '← กลับ',
+                selectLanguage: 'เลือกภาษา',
+                gameOver: 'เกมจบ',
+                yourScore: 'คะแนนของคุณ',
+                mainMenu: 'เมนูหลัก',
+                pause: 'หยุดชั่วคราว',
+                continue: '▶️ ดำเนินต่อ',
+                exit: '🏠 ออกสู่เมนู',
+                pauseHint: 'กด Esc เพื่อดำเนินต่อ',
+                score: 'คะแนน',
+                lives: 'ชีวิต',
+                difficulty: 'ความยาก'
+            },
+            vi: {
+                title: 'TRÒ BẮN SÚNG VŨ TRỤ',
+                subtitle: 'Bảo vệ thiên hà khỏi các tàu địch!',
+                start: '🚀 BẮT ĐẦU GAME',
+                musicOn: '🔊 Bật Nhạc',
+                musicOff: '🔇 Tắt Nhạc',
+                language: '🌐 Ngôn Ngữ',
+                hint: '💡 Mẹo: Nếu biểu tượng trang web bị thiếu — nhấn <b>Windows: Ctrl + F5</b> hoặc <b>Mac: Cmd + Shift + R</b>.',
+                selectDifficulty: 'CHỌN ĐỘ KHÓ',
+                easy: '😊 DỄ',
+                easyDesc: 'Kẻ địch chậm, nhiều mạng',
+                medium: '😎 TRUNG BÌNH',
+                mediumDesc: 'Trò chơi cân bằng',
+                hard: '😤 KHÓ',
+                hardDesc: 'Kẻ địch nhanh và nguy hiểm',
+                insane: '💀 ĐIÊN CUỒNG',
+                insaneDesc: 'Chỉ dành cho chuyên gia!',
+                back: '← Quay Lại',
+                selectLanguage: 'CHỌN NGÔN NGỮ',
+                gameOver: 'GAME KẾT THÚC',
+                yourScore: 'Điểm Của Bạn',
+                mainMenu: 'Menu Chính',
+                pause: 'TẠM DỪNG',
+                continue: '▶️ Tiếp Tục',
+                exit: '🏠 Thoát Ra Menu',
+                pauseHint: 'Nhấn Esc để tiếp tục',
+                score: 'Điểm',
+                lives: 'Mạng',
+                difficulty: 'Độ Khó'
+            }
+        };
 
         const sounds = {
             music: new Audio('music.mp3'),
@@ -326,6 +1011,44 @@
                     sounds[soundName].play().catch(e => {});
                 }
             } catch (e) {}
+        }
+
+        function updateTranslations() {
+            const t = translations[currentLanguage];
+            
+            document.querySelector('.lang-title').textContent = t.title;
+            document.querySelector('.lang-subtitle').textContent = t.subtitle;
+            document.querySelector('.lang-start').textContent = t.start;
+            document.querySelector('.lang-language').textContent = t.language;
+            document.querySelector('.lang-hint').innerHTML = t.hint;
+            document.querySelector('.lang-select-difficulty').textContent = t.selectDifficulty;
+            document.querySelector('.lang-easy').textContent = t.easy;
+            document.querySelector('.lang-easy-desc').textContent = t.easyDesc;
+            document.querySelector('.lang-medium').textContent = t.medium;
+            document.querySelector('.lang-medium-desc').textContent = t.mediumDesc;
+            document.querySelector('.lang-hard').textContent = t.hard;
+            document.querySelector('.lang-hard-desc').textContent = t.hardDesc;
+            document.querySelector('.lang-insane').textContent = t.insane;
+            document.querySelector('.lang-insane-desc').textContent = t.insaneDesc;
+            document.querySelectorAll('.lang-back').forEach(el => el.textContent = t.back);
+            document.querySelector('.lang-select-language').textContent = t.selectLanguage;
+            document.querySelector('.lang-game-over').textContent = t.gameOver;
+            document.querySelector('.lang-your-score').textContent = t.yourScore;
+            document.querySelector('.lang-main-menu').textContent = t.mainMenu;
+            document.querySelector('.lang-pause').textContent = t.pause;
+            document.querySelector('.lang-continue').textContent = t.continue;
+            document.querySelector('.lang-exit').textContent = t.exit;
+            document.querySelector('.lang-pause-hint').textContent = t.pauseHint;
+            document.querySelector('.lang-score').textContent = t.score;
+            document.querySelector('.lang-lives').textContent = t.lives;
+            document.querySelector('.lang-difficulty').textContent = t.difficulty;
+            
+            const musicBtn = document.getElementById('musicBtn');
+            if (musicEnabled) {
+                musicBtn.querySelector('span').textContent = t.musicOff;
+            } else {
+                musicBtn.querySelector('span').textContent = t.musicOn;
+            }
         }
 
         for (let i = 0; i < 100; i++) {
@@ -350,6 +1073,7 @@
             playSound('click');
             document.getElementById('mainMenu').classList.remove('hidden');
             document.getElementById('difficultyMenu').classList.add('hidden');
+            document.getElementById('languageMenu').classList.add('hidden');
             document.getElementById('gameOver').style.display = 'none';
             document.getElementById('ui').classList.add('hidden');
             gameRunning = false;
@@ -364,6 +1088,24 @@
             if (musicEnabled && sounds.music.paused) {
                 sounds.music.play().catch(e => {});
             }
+        }
+
+        function showLanguageMenu() {
+            playSound('click');
+            document.getElementById('mainMenu').classList.add('hidden');
+            document.getElementById('languageMenu').classList.remove('hidden');
+        }
+
+        function selectLanguage(lang) {
+            playSound('click');
+            currentLanguage = lang;
+            
+            document.querySelectorAll('.language-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            updateTranslations();
         }
 
         function selectDifficulty(diff) {
@@ -391,10 +1133,15 @@
             
             document.getElementById('score').textContent = score;
             document.getElementById('lives').textContent = lives;
-            document.getElementById('difficultyDisplay').textContent = 
-                difficulty === 'easy' ? 'Лёгкая' :
-                difficulty === 'medium' ? 'Средняя' :
-                difficulty === 'hard' ? 'Сложная' : 'Безумная';
+            
+            const t = translations[currentLanguage];
+            const difficultyNames = {
+                easy: t.easy.replace('😊 ', ''),
+                medium: t.medium.replace('😎 ', ''),
+                hard: t.hard.replace('😤 ', ''),
+                insane: t.insane.replace('💀 ', '')
+            };
+            document.getElementById('difficultyDisplay').textContent = difficultyNames[difficulty];
             
             if (spawnInterval) clearInterval(spawnInterval);
             spawnInterval = setInterval(() => {
@@ -474,11 +1221,6 @@
             ctx.lineTo(player.x + player.width / 2, player.y + player.height - 10);
             ctx.lineTo(player.x + player.width, player.y + player.height);
             ctx.closePath();
-            ctx.fill();
-            
-            ctx.fillStyle = '#00ffff';
-            ctx.beginPath();
-            ctx.arc(player.x + player.width / 2, player.y + 15, 8, 0, Math.PI * 2);
             ctx.fill();
             
             ctx.restore();
@@ -633,16 +1375,17 @@
         function toggleMusic() {
             playSound('click');
             const musicBtn = document.getElementById('musicBtn');
+            const t = translations[currentLanguage];
             
             if (musicEnabled) {
                 musicEnabled = false;
                 sounds.music.pause();
                 sounds.music.currentTime = 0;
-                musicBtn.innerHTML = '🔊 Включить музыку';
+                musicBtn.querySelector('span').textContent = t.musicOn;
             } else {
                 musicEnabled = true;
                 sounds.music.play().catch(e => {});
-                musicBtn.innerHTML = '🔇 Выключить музыку';
+                musicBtn.querySelector('span').textContent = t.musicOff;
             }
         }
 
@@ -674,6 +1417,3 @@
     </script>
 </body>
 </html>
-
-
-
