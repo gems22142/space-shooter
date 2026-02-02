@@ -26,19 +26,22 @@
         }
         #gameContainer {
             position: relative;
-            background: #000;
-            border: 3px solid #4a9eff;
-            border-radius: 10px;
-            box-shadow: 0 0 30px rgba(74, 158, 255, 0.5);
+            top: 0;
+            left: 0;
             width: 100vw;
-            max-width: 100vw;
             height: 100vh;
+            background: #000;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         canvas {
             display: block;
             background: radial-gradient(ellipse at center, #1a1a2e 0%, #000000 100%);
             width: 100%;
             height: 100%;
+            object-fit: contain;
         }
         #ui {
             position: absolute;
@@ -54,17 +57,19 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.95);
-            padding: 50px 60px;
+            background: rgba(0, 0, 0, 0.50);
+            padding: max(3vw, 30px) max(4vw, 40px);
             border-radius: 20px;
             text-align: center;
             color: #fff;
             border: 3px solid #4a9eff;
             box-shadow: 0 0 50px rgba(74, 158, 255, 0.8);
             z-index: 100;
+            max-width: 90%;
+            min-width: 300px;
         }
         #mainMenu h1 {
-            font-size: 56px;
+            font-size: clamp(32px, 5vw, 56px);
             margin-bottom: 15px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
@@ -81,18 +86,17 @@
             color: #aaa;
             margin-bottom: 40px;
         }
-        #difficultyMenu h2 {
-            font-size: 42px;
-            margin-bottom: 30px;
-            color: #4a9eff;
-            text-shadow: 0 0 20px #4a9eff;
+        #languageMenu {
+            max-height: 70vh;
+            overflow-y: auto;
+            padding: 30px 40px;
         }
         .difficulty-btn {
             display: block;
             width: 100%;
-            margin: 15px 0;
-            padding: 20px 40px;
-            font-size: 24px;
+            margin: 12px 0;
+            padding: min(4vw, 20px) min(6vw, 40px);
+            font-size: clamp(18px, 2.5vw, 24px);
             border: none;
             border-radius: 15px;
             cursor: pointer;
@@ -100,22 +104,6 @@
             font-weight: bold;
             position: relative;
             overflow: hidden;
-        }
-        .difficulty-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-        .difficulty-btn:hover::before {
-            width: 300px;
-            height: 300px;
         }
         .difficulty-btn span {
             position: relative;
@@ -166,13 +154,16 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 18px 50px;
-            font-size: 26px;
+            padding: min(4vw, 18px) min(8vw, 50px);
+            font-size: clamp(20px, 2.5vw, 26px);
             border-radius: 30px;
             cursor: pointer;
             transition: all 0.3s;
             box-shadow: 0 5px 20px rgba(102, 126, 234, 0.5);
             font-weight: bold;
+            margin: 8px 0;
+            width: 100%;
+            max-width: 400px;
         }
         .start-btn:hover {
             transform: translateY(-3px);
@@ -198,7 +189,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0, 0, 0, 0.50);
             padding: 40px;
             border-radius: 15px;
             text-align: center;
@@ -225,11 +216,6 @@
         }
         .hidden {
             display: none;
-        }
-        #languageMenu {
-            max-height: 70vh;
-            overflow-y: auto;
-            padding: 30px 40px;
         }
         #languageMenu h2 {
             font-size: 42px;
@@ -277,6 +263,113 @@
         #languageMenu::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
         }
+        .high-score-display {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 165, 0, 0.3) 100%);
+            border: 2px solid #FFD700;
+            border-radius: 15px;
+            padding: 15px 25px;
+            margin: 25px auto;
+            max-width: 400px;
+            animation: gold-glow 3s ease-in-out infinite;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.3);
+        }
+        @keyframes gold-glow {
+            0%, 100% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.3); }
+            50% { box-shadow: 0 0 35px rgba(255, 215, 0, 0.6); }
+        }
+        .high-score-title {
+            font-size: 20px;
+            color: #FFD700;
+            text-shadow: 0 0 10px #FFD700;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .high-score-value {
+            font-size: 32px;
+            color: #FFFFFF;
+            text-shadow: 0 0 15px #FFD700;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+    .new-record {
+    animation: new-record-blow 0.8s ease-in-out infinite alternate;
+    color: #FFD700 !important;
+    text-shadow: 
+        0 0 10px #FFD700,
+        0 0 20px #FFD700,
+        0 0 30px #FF4500,
+        0 0 40px #FF4500;
+    transform-origin: center;
+    letter-spacing: 1px;
+    font-weight: bold;
+    position: relative;
+    display: inline-block;
+    padding: 5px 15px;
+}
+
+       @keyframes new-record-blow {
+    0% {
+        transform: scale(1);
+        text-shadow: 
+            0 0 10px #FFD700,
+            0 0 20px #FFD700,
+            0 0 30px #FF4500,
+            0 0 40px #FF4500;
+    }
+    100% {
+        transform: scale(1.05);
+        text-shadow: 
+            0 0 15px #FFD700,
+            0 0 25px #FFD700,
+            0 0 35px #FF4500,
+            0 0 45px #FF4500;
+    }
+}
+        .reset-confirm {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            border: 3px solid #ff4a4a;
+            box-shadow: 0 0 40px rgba(255, 74, 74, 0.50);
+            z-index: 1000;
+            text-align: center;
+            color: white;
+            min-width: 300px;
+            display: none;
+        }
+        .reset-confirm h3 {
+            color: #ff4a4a;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .reset-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .reset-yes {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .reset-no {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
@@ -288,9 +381,15 @@
             <div><span class="lang-difficulty">Сложность</span>: <span id="difficultyDisplay"></span></div>
         </div>
         
-        <div id="mainMenu" class="menu">
-            <h1 class="lang-title">КОСМИЧЕСКИЙ ШУТЕР</h1>
-            <p class="lang-subtitle">Защити галактику от вражеских кораблей!</p>
+      <div id="mainMenu" class="menu" style="width: 1280px; height: 720px; max-width: 90vw; max-height: 90vh; overflow: hidden; background: rgba(0, 0, 0, 0.50);">
+    <h1 class="lang-title">КОСМИЧЕСКИЙ ШУТЕР</h1>
+    <p class="lang-subtitle">Защити галактику от вражеских кораблей!</p>
+            
+            <div class="high-score-display">
+                <div class="high-score-title lang-highscore">🏆 РЕКОРД:</div>
+                <div class="high-score-value" id="highScoreDisplay">0</div>
+            </div>
+            
             <button class="start-btn" onclick="showDifficultyMenu()"><span class="lang-start">🚀 НАЧАТЬ ИГРУ</span></button>
             <button class="start-btn" onclick="toggleMusic()" id="musicBtn" style="margin-top: 15px; font-size: 20px; padding: 12px 30px;">
                 <span class="lang-music-on">🔊 Включить музыку</span>
@@ -298,8 +397,11 @@
             <button class="start-btn" onclick="showLanguageMenu()" style="margin-top: 15px; font-size: 20px; padding: 12px 30px;">
                 <span class="lang-language">🌐 Язык</span>
             </button>
-            <p style="margin-top: 20px; font-size: 14px; opacity: 0.8;" class="lang-hint">
-            💡 Подсказка: Если нету иконки на сайте — нажмите <b>Windows: Ctrl + F5</b> или <b>Mac: Cmd + Shift + R</b>.
+            <button class="start-btn" onclick="resetHighScore()" style="margin-top: 15px; font-size: 18px; padding: 10px 25px; background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);">
+                <span class="lang-reset-score">🗑️ Сбросить рекорд</span>
+            </button>
+            <p style="margin-top: 20px; font-size: 18px; opacity: 0.8;" class="lang-hint">
+                💡 Подсказка: Если нет иконки на сайте — нажмите <b>Windows: Ctrl + F5</b> или <b>Mac: Cmd + Shift + R</b>.
             </p>
         </div>
 
@@ -354,6 +456,11 @@
         <div id="gameOver">
             <h2 class="lang-game-over">ИГРА ОКОНЧЕНА</h2>
             <p><span class="lang-your-score">Ваш счёт</span>: <span id="finalScore">0</span></p>
+            <p id="newRecordMessage" style="display: none; margin: 20px 0 30px;">
+              <span class="lang-new-record" style="display: inline-block; padding: 8px 20px; border-radius: 12px; background: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,69,0,0.2) 100%); border: 2px solid #FFD700; font-size: 26px; font-weight: bold;">
+    🏆 🎉 НОВЫЙ РЕКОРД ! 🎉 🏆
+</span>
+</p>
             <button class="start-btn" onclick="showMainMenu()"><span class="lang-main-menu">В главное меню</span></button>
         </div>
 
@@ -362,6 +469,15 @@
             <button class="start-btn" onclick="resumeGame()" style="margin-bottom: 15px;"><span class="lang-continue">▶️ Продолжить</span></button>
             <button class="start-btn" onclick="exitToMenu()" style="background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);"><span class="lang-exit">🏠 Выйти в меню</span></button>
             <p style="color: #aaa; margin-top: 20px; font-size: 16px;" class="lang-pause-hint">Нажмите Esc чтобы продолжить</p>
+        </div>
+    </div>
+
+    <div id="resetConfirm" class="reset-confirm">
+        <h3 class="lang-reset-confirm">Сбросить рекорд?</h3>
+        <p class="lang-reset-warning">Это действие нельзя отменить!</p>
+        <div class="reset-buttons">
+            <button class="reset-yes" onclick="confirmReset()"><span class="lang-reset-yes">Да, сбросить</span></button>
+            <button class="reset-no" onclick="cancelReset()"><span class="lang-reset-no">Нет, отмена</span></button>
         </div>
     </div>
 
@@ -388,6 +504,8 @@
         let spawnInterval = null;
         let musicEnabled = false;
         let gamePaused = false;
+        
+        let highScore = 0;
 
         const translations = {
             ru: {
@@ -397,7 +515,7 @@
                 musicOn: '🔊 Включить музыку',
                 musicOff: '🔇 Выключить музыку',
                 language: '🌐 Язык',
-                hint: '💡 Подсказка: Если нету иконки на сайте — нажмите <b>Windows: Ctrl + F5</b> или <b>Mac: Cmd + Shift + R</b>.',
+                hint: '💡 Подсказка: Если нет иконки на сайте — нажмите <b>Windows: Ctrl + F5</b> или <b>Mac: Cmd + Shift + R</b>.',
                 selectDifficulty: 'ВЫБЕРИТЕ СЛОЖНОСТЬ',
                 easy: '😊 ЛЁГКАЯ',
                 easyDesc: 'Враги медленные, много жизней',
@@ -418,7 +536,14 @@
                 pauseHint: 'Нажмите Esc чтобы продолжить',
                 score: 'Очки',
                 lives: 'Жизни',
-                difficulty: 'Сложность'
+                difficulty: 'Сложность',
+                highscore: '🏆 РЕКОРД:',
+                resetScore: '🗑️ Сбросить рекорд',
+                resetConfirm: 'Сбросить рекорд?',
+                resetWarning: 'Это действие нельзя отменить!',
+                resetYes: 'Да, сбросить',
+                resetNo: 'Нет, отмена',
+                newRecord: '🏆 🎉 НОВЫЙ РЕКОРД! 🎉 🏆'
             },
             uk: {
                 title: 'КОСМІЧНИЙ ШУТЕР',
@@ -448,7 +573,14 @@
                 pauseHint: 'Натисніть Esc щоб продовжити',
                 score: 'Очки',
                 lives: 'Життя',
-                difficulty: 'Складність'
+                difficulty: 'Складність',
+                highscore: '🏆 РЕКОРД:',
+                resetScore: '🗑️ Скинути рекорд',
+                resetConfirm: 'Скинути рекорд?',
+                resetWarning: 'Цю дію не можна скасувати!',
+                resetYes: 'Так, скинути',
+                resetNo: 'Ні, скасувати',
+                newRecord: '🏆 🎉 НОВИЙ РЕКОРД! 🎉 🏆'
             },
             be: {
                 title: 'КАСМІЧНЫ ШУТЭР',
@@ -478,7 +610,14 @@
                 pauseHint: 'Націсніце Esc каб працягнуць',
                 score: 'Балы',
                 lives: 'Жыцці',
-                difficulty: 'Складанасць'
+                difficulty: 'Складанасць',
+                highscore: '🏆 РЭКОРД:',
+                resetScore: '🗑️ Скінуць рэкорд',
+                resetConfirm: 'Скінуць рэкорд?',
+                resetWarning: 'Гэта дзеянне нельга адмяніць!',
+                resetYes: 'Так, скінуць',
+                resetNo: 'Не, адмена',
+                newRecord: '🏆 🎉 НОВЫ РЭКОРД! 🎉 🏆'
             },
             kk: {
                 title: 'ҒАРЫШТЫҚ ШУТЕР',
@@ -508,7 +647,14 @@
                 pauseHint: 'Жалғастыру үшін Esc басыңыз',
                 score: 'Ұпай',
                 lives: 'Өмір',
-                difficulty: 'Қиындық'
+                difficulty: 'Қиындық',
+                highscore: '🏆 РЕКОРД:',
+                resetScore: '🗑️ Рекордты тазалау',
+                resetConfirm: 'Рекордты тазалау?',
+                resetWarning: 'Бұл әрекетті болдырмау мүмкін емес!',
+                resetYes: 'Ия, тазалау',
+                resetNo: 'Жоқ, болдырмау',
+                newRecord: '🏆 🎉 ЖАҢА РЕКОРД! 🎉 🏆'
             },
             hy: {
                 title: 'ՏԻԵԶԵՐԱԿԱՆ ՇՈՒՏԵՐ',
@@ -538,7 +684,14 @@
                 pauseHint: 'Շարունակելու համար սեղմեք Esc',
                 score: 'Միավոր',
                 lives: 'Կյանք',
-                difficulty: 'Բարդություն'
+                difficulty: 'Բարդություն',
+                highscore: '🏆 ՌԵԿՈՐԴ:',
+                resetScore: '🗑️ Վերականգնել ռեկորդը',
+                resetConfirm: 'Վերականգնել ռեկորդը?',
+                resetWarning: 'Այս գործողությունը չի կարող չեղարկվել!',
+                resetYes: 'Այո, վերականգնել',
+                resetNo: 'Ոչ, չեղարկել',
+                newRecord: '🏆 🎉 ՆՈՐ ՌԵԿՈՐԴ! 🎉 🏆'
             },
             zh: {
                 title: '太空射击游戏',
@@ -568,7 +721,14 @@
                 pauseHint: '按 Esc 继续',
                 score: '分数',
                 lives: '生命',
-                difficulty: '难度'
+                difficulty: '难度',
+                highscore: '🏆 最高分:',
+                resetScore: '🗑️ 重置最高分',
+                resetConfirm: '重置最高分？',
+                resetWarning: '此操作无法撤销！',
+                resetYes: '是，重置',
+                resetNo: '否，取消',
+                newRecord: '🏆 🎉 新纪录！ 🎉 🏆'
             },
             ja: {
                 title: 'スペースシューター',
@@ -598,7 +758,14 @@
                 pauseHint: 'Esc を押して続ける',
                 score: 'スコア',
                 lives: 'ライフ',
-                difficulty: '難易度'
+                difficulty: '難易度',
+                highscore: '🏆 ハイスコア:',
+                resetScore: '🗑️ ハイスコアをリセット',
+                resetConfirm: 'ハイスコアをリセットしますか？',
+                resetWarning: 'この操作は取り消せません！',
+                resetYes: 'はい、リセット',
+                resetNo: 'いいえ、キャンセル',
+                newRecord: '🏆 🎉 新記録！ 🎉 🏆'
             },
             en: {
                 title: 'SPACE SHOOTER',
@@ -628,7 +795,14 @@
                 pauseHint: 'Press Esc to continue',
                 score: 'Score',
                 lives: 'Lives',
-                difficulty: 'Difficulty'
+                difficulty: 'Difficulty',
+                highscore: '🏆 HIGH SCORE:',
+                resetScore: '🗑️ Reset High Score',
+                resetConfirm: 'Reset High Score?',
+                resetWarning: 'This action cannot be undone!',
+                resetYes: 'Yes, reset',
+                resetNo: 'No, cancel',
+                newRecord: '🏆 🎉 NEW RECORD! 🎉 🏆'
             },
             es: {
                 title: 'TIRADOR ESPACIAL',
@@ -658,7 +832,14 @@
                 pauseHint: 'Presiona Esc para continuar',
                 score: 'Puntos',
                 lives: 'Vidas',
-                difficulty: 'Dificultad'
+                difficulty: 'Dificultad',
+                highscore: '🏆 RÉCORD:',
+                resetScore: '🗑️ Restablecer récord',
+                resetConfirm: '¿Restablecer récord?',
+                resetWarning: '¡Esta acción no se puede deshacer!',
+                resetYes: 'Sí, restablecer',
+                resetNo: 'No, cancelar',
+                newRecord: '🏆 🎉 ¡NUEVO RÉCORD! 🎉 🏆'
             },
             ar: {
                 title: 'لعبة إطلاق النار الفضائية',
@@ -688,7 +869,14 @@
                 pauseHint: 'اضغط Esc للمتابعة',
                 score: 'النقاط',
                 lives: 'الأرواح',
-                difficulty: 'الصعوبة'
+                difficulty: 'الصعوبة',
+                highscore: '🏆 سجل قياسي:',
+                resetScore: '🗑️ إعادة تعيين الرقم القياسي',
+                resetConfirm: 'إعادة تعيين الرقم القياسي؟',
+                resetWarning: 'لا يمكن التراجع عن هذا الإجراء!',
+                resetYes: 'نعم، إعادة تعيين',
+                resetNo: 'لا، إلغاء',
+                newRecord: '🏆 🎉 رقم قياسي جديد! 🎉 🏆'
             },
             fr: {
                 title: 'TIREUR SPATIAL',
@@ -718,7 +906,14 @@
                 pauseHint: 'Appuyez sur Esc pour continuer',
                 score: 'Score',
                 lives: 'Vies',
-                difficulty: 'Difficulté'
+                difficulty: 'Difficulté',
+                highscore: '🏆 MEILLEUR SCORE:',
+                resetScore: '🗑️ Réinitialiser le score',
+                resetConfirm: 'Réinitialiser le score?',
+                resetWarning: 'Cette action est irréversible!',
+                resetYes: 'Oui, réinitialiser',
+                resetNo: 'Non, annuler',
+                newRecord: '🏆 🎉 NOUVEAU RECORD! 🎉 🏆'
             },
             de: {
                 title: 'WELTRAUM-SHOOTER',
@@ -748,7 +943,14 @@
                 pauseHint: 'Drücken Sie Esc zum Fortsetzen',
                 score: 'Punkte',
                 lives: 'Leben',
-                difficulty: 'Schwierigkeit'
+                difficulty: 'Schwierigkeit',
+                highscore: '🏆 REKORD:',
+                resetScore: '🗑️ Rekord zurücksetzen',
+                resetConfirm: 'Rekord zurücksetzen?',
+                resetWarning: 'Diese Aktion kann nicht rückgängig gemacht werden!',
+                resetYes: 'Ja, zurücksetzen',
+                resetNo: 'Nein, abbrechen',
+                newRecord: '🏆 🎉 NEUER REKORD! 🎉 🏆'
             },
             it: {
                 title: 'SPARATUTTO SPAZIALE',
@@ -778,7 +980,14 @@
                 pauseHint: 'Premi Esc per continuare',
                 score: 'Punteggio',
                 lives: 'Vite',
-                difficulty: 'Difficoltà'
+                difficulty: 'Difficoltà',
+                highscore: '🏆 PUNTEGGIO MASSIMO:',
+                resetScore: '🗑️ Resetta punteggio',
+                resetConfirm: 'Resettare il punteggio?',
+                resetWarning: 'Questa azione non può essere annullata!',
+                resetYes: 'Sì, resetta',
+                resetNo: 'No, annulla',
+                newRecord: '🏆 🎉 NUOVO RECORD! 🎉 🏆'
             },
             pt: {
                 title: 'ATIRADOR ESPACIAL',
@@ -808,7 +1017,14 @@
                 pauseHint: 'Pressione Esc para continuar',
                 score: 'Pontos',
                 lives: 'Vidas',
-                difficulty: 'Dificuldade'
+                difficulty: 'Dificuldade',
+                highscore: '🏆 RECORDE:',
+                resetScore: '🗑️ Redefinir recorde',
+                resetConfirm: 'Redefinir recorde?',
+                resetWarning: 'Esta ação não pode ser desfeita!',
+                resetYes: 'Sim, redefinir',
+                resetNo: 'Não, cancelar',
+                newRecord: '🏆 🎉 NOVO RECORDE! 🎉 🏆'
             },
             pl: {
                 title: 'STRZELANKA KOSMICZNA',
@@ -838,7 +1054,14 @@
                 pauseHint: 'Naciśnij Esc aby kontynuować',
                 score: 'Wynik',
                 lives: 'Życia',
-                difficulty: 'Trudność'
+                difficulty: 'Trudność',
+                highscore: '🏆 REKORD:',
+                resetScore: '🗑️ Zresetuj rekord',
+                resetConfirm: 'Zresetować rekord?',
+                resetWarning: 'Tej akcji nie można cofnąć!',
+                resetYes: 'Tak, zresetuj',
+                resetNo: 'Nie, anuluj',
+                newRecord: '🏆 🎉 NOWY REKORD! 🎉 🏆'
             },
             tr: {
                 title: 'UZAY ATICI',
@@ -868,7 +1091,14 @@
                 pauseHint: 'Devam etmek için Esc\'ye basın',
                 score: 'Puan',
                 lives: 'Can',
-                difficulty: 'Zorluk'
+                difficulty: 'Zorluk',
+                highscore: '🏆 REKOR:',
+                resetScore: '🗑️ Rekoru sıfırla',
+                resetConfirm: 'Rekoru sıfırlamak istiyor musunuz?',
+                resetWarning: 'Bu işlem geri alınamaz!',
+                resetYes: 'Evet, sıfırla',
+                resetNo: 'Hayır, iptal',
+                newRecord: '🏆 🎉 YENİ REKOR! 🎉 🏆'
             },
             ko: {
                 title: '우주 슈터',
@@ -898,7 +1128,14 @@
                 pauseHint: '계속하려면 Esc를 누르세요',
                 score: '점수',
                 lives: '생명',
-                difficulty: '난이도'
+                difficulty: '난이도',
+                highscore: '🏆 최고 점수:',
+                resetScore: '🗑️ 최고 점수 초기화',
+                resetConfirm: '최고 점수를 초기화하시겠습니까?',
+                resetWarning: '이 작업은 취소할 수 없습니다!',
+                resetYes: '예, 초기화',
+                resetNo: '아니요, 취소',
+                newRecord: '🏆 🎉 새 기록! 🎉 🏆'
             },
             hi: {
                 title: 'स्पेस शूटर',
@@ -928,7 +1165,14 @@
                 pauseHint: 'जारी रखने के लिए Esc दबाएं',
                 score: 'स्कोर',
                 lives: 'जीवन',
-                difficulty: 'कठिनाई'
+                difficulty: 'कठिनाई',
+                highscore: '🏆 उच्च स्कोर:',
+                resetScore: '🗑️ हाई स्कोर रीसेट करें',
+                resetConfirm: 'हाई स्कोर रीसेट करें?',
+                resetWarning: 'इस क्रिया को पूर्ववत नहीं किया जा सकता!',
+                resetYes: 'हाँ, रीसेट करें',
+                resetNo: 'नहीं, रद्द करें',
+                newRecord: '🏆 🎉 नया रिकॉर्ड! 🎉 🏆'
             },
             th: {
                 title: 'เกมยิงอวกาศ',
@@ -958,7 +1202,14 @@
                 pauseHint: 'กด Esc เพื่อดำเนินต่อ',
                 score: 'คะแนน',
                 lives: 'ชีวิต',
-                difficulty: 'ความยาก'
+                difficulty: 'ความยาก',
+                highscore: '🏆 คะแนนสูงสุด:',
+                resetScore: '🗑️ รีเซ็ตคะแนนสูงสุด',
+                resetConfirm: 'รีเซ็ตคะแนนสูงสุด?',
+                resetWarning: 'การดำเนินการนี้ไม่สามารถยกเลิกได้!',
+                resetYes: 'ใช่, รีเซ็ต',
+                resetNo: 'ไม่, ยกเลิก',
+                newRecord: '🏆 🎉 คะแนนสูงสุดใหม่! 🎉 🏆'
             },
             vi: {
                 title: 'TRÒ BẮN SÚNG VŨ TRỤ',
@@ -988,7 +1239,14 @@
                 pauseHint: 'Nhấn Esc để tiếp tục',
                 score: 'Điểm',
                 lives: 'Mạng',
-                difficulty: 'Độ Khó'
+                difficulty: 'Độ Khó',
+                highscore: '🏆 KỶ LỤC:',
+                resetScore: '🗑️ Đặt lại kỷ lục',
+                resetConfirm: 'Đặt lại kỷ lục?',
+                resetWarning: 'Hành động này không thể hoàn tác!',
+                resetYes: 'Có, đặt lại',
+                resetNo: 'Không, hủy',
+                newRecord: '🏆 🎉 KỶ LỤC MỚI! 🎉 🏆'
             }
         };
 
@@ -996,6 +1254,7 @@
             music: new Audio('music.mp3'),
             click: new Audio('click.mp3'),
             gameover: new Audio('gameover.mp3'),
+            warning: new Audio('warning.mp3'),
             piu: new Audio('piu.mp3'),
             hit: new Audio('hit.mp3'),
             oi: new Audio('oi.mp3')
@@ -1011,6 +1270,44 @@
                     sounds[soundName].play().catch(e => {});
                 }
             } catch (e) {}
+        }
+
+        function saveHighScore(score) {
+            localStorage.setItem('spaceShooterHighScore', score);
+            highScore = score;
+            updateHighScoreDisplay();
+        }
+
+        function loadHighScore() {
+            const saved = localStorage.getItem('spaceShooterHighScore');
+            highScore = saved ? parseInt(saved) : 0;
+            updateHighScoreDisplay();
+        }
+
+        function updateHighScoreDisplay() {
+            const display = document.getElementById('highScoreDisplay');
+            if (display) {
+                display.textContent = highScore;
+            }
+        }
+
+        function resetHighScore() {
+            playSound('click');
+            playSound('warning');
+            document.getElementById('resetConfirm').style.display = 'block';
+        }
+
+        function confirmReset() {
+            playSound('click');
+            localStorage.removeItem('spaceShooterHighScore');
+            highScore = 0;
+            updateHighScoreDisplay();
+            document.getElementById('resetConfirm').style.display = 'none';
+        }
+
+        function cancelReset() {
+            playSound('click');
+            document.getElementById('resetConfirm').style.display = 'none';
         }
 
         function updateTranslations() {
@@ -1042,6 +1339,13 @@
             document.querySelector('.lang-score').textContent = t.score;
             document.querySelector('.lang-lives').textContent = t.lives;
             document.querySelector('.lang-difficulty').textContent = t.difficulty;
+            document.querySelector('.lang-highscore').textContent = t.highscore;
+            document.querySelector('.lang-reset-score').textContent = t.resetScore;
+            document.querySelector('.lang-reset-confirm').textContent = t.resetConfirm;
+            document.querySelector('.lang-reset-warning').textContent = t.resetWarning;
+            document.querySelector('.lang-reset-yes').textContent = t.resetYes;
+            document.querySelector('.lang-reset-no').textContent = t.resetNo;
+            document.querySelector('.lang-new-record').textContent = t.newRecord;
             
             const musicBtn = document.getElementById('musicBtn');
             if (musicEnabled) {
@@ -1078,6 +1382,8 @@
             document.getElementById('ui').classList.add('hidden');
             gameRunning = false;
             if (spawnInterval) clearInterval(spawnInterval);
+            
+            loadHighScore();
         }
 
         function showDifficultyMenu() {
@@ -1171,14 +1477,14 @@
             keys[e.key] = false;
         });
 
-        function shootBullet() {
+   function shootBullet() {
             playSound('piu');
             bullets.push({
                 x: player.x + player.width / 2 - 2,
                 y: player.y,
                 width: 4,
                 height: 15,
-                speed: 8,
+                speed: 10,
                 color: '#ffff00'
             });
         }
@@ -1368,7 +1674,19 @@
             gameRunning = false;
             if (spawnInterval) clearInterval(spawnInterval);
             playSound('gameover');
+            
             document.getElementById('finalScore').textContent = score;
+            
+            const newRecordMessage = document.getElementById('newRecordMessage');
+            
+            if (score > highScore) {
+                saveHighScore(score);
+                newRecordMessage.style.display = 'block';
+                newRecordMessage.classList.add('new-record');
+            } else {
+                newRecordMessage.style.display = 'none';
+            }
+            
             document.getElementById('gameOver').style.display = 'block';
         }
 
@@ -1413,6 +1731,7 @@
             showMainMenu();
         }
 
+        loadHighScore();
         gameLoop();
     </script>
 </body>
